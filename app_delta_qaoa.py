@@ -83,7 +83,7 @@ df_trabajo = None
 if modo == "1. Escenario Base (Delta del Ebro)":
     df_trabajo = pd.DataFrame({
         "Zona_Critica": ["Bahia_Fangar_Mejilloneras", "Desembocadura_Ebro_Humedal", "Bahia_Alfacs_Ostras", "Istmo_Trabucador"],
-        "Valor_Ecologico":,
+        "Valor_Ecologico": list((90, 85, 95, 60)),
         "Riesgo_Corriente": [80, 70, 90, 50]
     })
     st.subheader("1. Mapa de Zonas Críticas (Escenario Predefinido)")
@@ -94,7 +94,7 @@ elif modo == "2. Control Numérico Manual":
     st.write("Modifica directamente los valores de sensibilidad ecológica y riesgo por corriente en la tabla:")
     df_base = pd.DataFrame({
         "Zona_Critica": ["Zona_0_Fangar", "Zona_1_Desembocadura", "Zona_2_Alfacs", "Zona_3_Trabucador"],
-        "Valor_Ecologico":,
+        "Valor_Ecologico": list((90, 85, 95, 60)),
         "Riesgo_Corriente": [80, 70, 90, 50]
     })
     df_trabajo = st.data_editor(df_base, num_rows="fixed", use_container_width=True)
@@ -104,7 +104,7 @@ else:
     st.write("Sube un archivo con **4 filas** (una por cuadrante) y las columnas: `Zona_Critica`, `Valor_Ecologico`, `Riesgo_Corriente`.")
     plantilla = pd.DataFrame({
         "Zona_Critica": ["Cuadrante_Norte_Fangar", "Cuadrante_Centro_Ebro", "Cuadrante_Sur_Alfacs", "Cuadrante_Exterior_Trabucador"],
-        "Valor_Ecologico":,
+        "Valor_Ecologico": list((90, 85, 95, 60)),
         "Riesgo_Corriente": [75, 85, 90, 55]
     })
     st.download_button(
