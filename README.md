@@ -4,8 +4,8 @@ Aplicación web interactiva de Economía Azul basada en **IBM Qiskit (QAOA)** di
 
 🔗 **Prueba la aplicación en vivo aquí:** https://contencion-delta-ebro-cuantica.streamlit.app/
 
+<img width="1650" height="942" alt="Captura de pantalla 2026-11-24 154925" src="https://github.com/user-attachments/assets/a50da19d-ffd4-4eb2-be36-fda01d5e3c1a" />
 
-<img width="1588" height="888" alt="Captura de pantalla 2026-11-23 213244" src="https://github.com/user-attachments/assets/247afa72-f31b-4369-aa97-6da346ba7f4e" />
 
 
 ## 🌊 Impacto y Funcionalidades
