@@ -136,17 +136,19 @@ if df_trabajo is not None and len(df_trabajo) >= 4:
             col1.metric("Estado Cuántico Ganador (q0-q3)", bits_ganadores)
             col2.metric("Frecuencia de Muestreo", f"{conteos.get(bits_ganadores[::-1])} / 1000 disparos")
             
-            # Gráfica de top 5 combinaciones medidas
+                        # Gráfica de top 5 combinaciones medidas traducidas a nombres claros
             top_conteos = dict(sorted(conteos.items(), key=lambda item: item[1], reverse=True)[:5])
-            etiquetas_ordenadas = [k[::-1] for k in top_conteos.keys()]
+            etiquetas_ordenadas = []
+            for k in top_conteos.keys():
+                bits_k = k[::-1]
+                nombres = [str(df_trabajo.iloc[i].get("Zona_Critica")).split("_").pop(1) for i in range(4) if bits_k[i] == '1']
+                etiquetas_ordenadas.append(" + ".join(nombres) if nombres else "Ninguna")
             valores_ordenados = list(top_conteos.values())
             
             fig, ax = plt.subplots(figsize=(8, 3.2))
             ax.bar(etiquetas_ordenadas, valores_ordenados, color='#1f77b4')
-            ax.set_title("Distribución de Probabilidad QAOA (Top 5 Configuraciones)")
-            ax.set_xlabel("Combinación de Zonas (q0, q1, q2, q3)")
-            ax.set_ylabel("Frecuencia (de 1000 disparos)")
-            st.pyplot(fig)
+            ax.set_title("Comparativa QAOA: Combinaciones de Protección Más Óptimas")
+            ax.set_xlabel("Zonas Prioritarias Seleccionadas")
 
 # --- PIE DE PÁGINA Y CONTACTO ---
 st.divider()
