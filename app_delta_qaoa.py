@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+from operator import itemgetter
 from qiskit.quantum_info import SparsePauliOp
 from qiskit.circuit.library import QAOAAnsatz
 from qiskit.primitives import StatevectorEstimator
@@ -138,19 +139,20 @@ if df_trabajo is not None and len(df_trabajo) >= 4:
             col1.metric("Estado Cuántico Ganador (q0-q3)", bits_ganadores)
             col2.metric("Frecuencia de Muestreo", f"{conteos.get(bits_ganadores[::-1])} / 1000 disparos")
             
-            top_conteos = dict(sorted(conteos.items(), key=lambda item: item[1], reverse=True)[:5])
+            top_conteos = dict(sorted(conteos.items(), key=itemgetter(1), reverse=True)[:5])
             etiquetas_ordenadas = []
             for k in top_conteos.keys():
                 bits_k = k[::-1]
                 nombres = [str(df_trabajo.iloc[i].get("Zona_Critica")).split("_").pop(1) for i in range(4) if bits_k[i] == '1']
-                etiquetas_ordenadas.append(" + ".join(nombres) if nombres else "Ninguna")
+                etiquetas_ordenadas.append("\n+ ".join(nombres) if nombres else "Ninguna")
             valores_ordenados = list(top_conteos.values())
             
-            fig, ax = plt.subplots(figsize=(8, 3.2))
+            fig, ax = plt.subplots(figsize=(8, 3.4))
             ax.bar(etiquetas_ordenadas, valores_ordenados, color='#1f77b4')
             ax.set_title("Comparativa QAOA: Combinaciones de Protección Más Óptimas")
             ax.set_xlabel("Zonas Prioritarias Seleccionadas")
             ax.set_ylabel("Frecuencia (de 1000 disparos)")
+            ax.tick_params(axis='x', labelsize=9)
             st.pyplot(fig)
 
 # --- PIE DE PÁGINA Y CONTACTO ---
