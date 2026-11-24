@@ -29,7 +29,6 @@ with st.expander("📊 Impacto Empresarial, Perfiles Objetivo y Ventaja Tecnoló
 
 # --- MOTOR CUÁNTICO QAOA ---
 def ejecutar_qaoa_delta(df_zonas, bloquear_0_2=True):
-    # Calculamos el peso de cada zona (Valor + Riesgo) normalizado
     pesos = []
     for idx, fila in df_zonas.iterrows():
         puntuacion = (float(fila.get("Valor_Ecologico")) + float(fila.get("Riesgo_Corriente"))) / 100.0
@@ -40,7 +39,6 @@ def ejecutar_qaoa_delta(df_zonas, bloquear_0_2=True):
         ("IIZI", -pesos.pop(0)),
         ("IZII", -pesos.pop(0)),
         ("ZIII", -pesos.pop(0)),
-        # Penalización por exceder presupuesto de 2 barreras
         ("IIZZ", 2.50), ("IZIZ", 2.50), ("ZIIZ", 2.50),
         ("IZZI", 2.50), ("ZIZI", 2.50), ("ZZII", 2.50)
     ]
@@ -84,7 +82,7 @@ if modo == "1. Escenario Base (Delta del Ebro)":
     df_trabajo = pd.DataFrame({
         "Zona_Critica": ["Bahia_Fangar_Mejilloneras", "Desembocadura_Ebro_Humedal", "Bahia_Alfacs_Ostras", "Istmo_Trabucador"],
         "Valor_Ecologico": list((90, 85, 95, 60)),
-        "Riesgo_Corriente": [80, 70, 90, 50]
+        "Riesgo_Corriente": list((80, 70, 90, 50))
     })
     st.subheader("1. Mapa de Zonas Críticas (Escenario Predefinido)")
     st.dataframe(df_trabajo, use_container_width=True)
@@ -95,7 +93,7 @@ elif modo == "2. Control Numérico Manual":
     df_base = pd.DataFrame({
         "Zona_Critica": ["Zona_0_Fangar", "Zona_1_Desembocadura", "Zona_2_Alfacs", "Zona_3_Trabucador"],
         "Valor_Ecologico": list((90, 85, 95, 60)),
-        "Riesgo_Corriente": [80, 70, 90, 50]
+        "Riesgo_Corriente": list((80, 70, 90, 50))
     })
     df_trabajo = st.data_editor(df_base, num_rows="fixed", use_container_width=True)
 
@@ -105,7 +103,7 @@ else:
     plantilla = pd.DataFrame({
         "Zona_Critica": ["Cuadrante_Norte_Fangar", "Cuadrante_Centro_Ebro", "Cuadrante_Sur_Alfacs", "Cuadrante_Exterior_Trabucador"],
         "Valor_Ecologico": list((90, 85, 95, 60)),
-        "Riesgo_Corriente": [75, 85, 90, 55]
+        "Riesgo_Corriente": list((75, 85, 90, 55))
     })
     st.download_button(
         label="📥 Descargar plantilla CSV de emergencia marítima",
@@ -132,11 +130,14 @@ if df_trabajo is not None and len(df_trabajo) >= 4:
             st.subheader("2. Plan de Acción Recomendado por el Circuito QAOA")
             st.success(f"✅ **Desplegar barreras absorbentes en:** {', '.join(zonas_elegidas)}")
             
+            puntos_totales = sum([int(df_trabajo.iloc[i].get("Valor_Ecologico")) + int(df_trabajo.iloc[i].get("Riesgo_Corriente")) for i in range(4) if bits_ganadores[i] == '1'])
+            motivo_logistico = "respetando la restricción de distancia entre Fangar y Alfacs" if bloquear_distancia else "sin restricciones de distancia entre bahías"
+            st.info(f"💡 **Por qué esta decisión:** Esta combinación protege un índice de riesgo-valor de **{puntos_totales} puntos**, maximizando la cobertura ecológica con el presupuesto de 2 barreras y {motivo_logistico}.")
+            
             col1, col2 = st.columns(2)
             col1.metric("Estado Cuántico Ganador (q0-q3)", bits_ganadores)
             col2.metric("Frecuencia de Muestreo", f"{conteos.get(bits_ganadores[::-1])} / 1000 disparos")
             
-                        # Gráfica de top 5 combinaciones medidas traducidas a nombres claros
             top_conteos = dict(sorted(conteos.items(), key=lambda item: item[1], reverse=True)[:5])
             etiquetas_ordenadas = []
             for k in top_conteos.keys():
@@ -149,6 +150,8 @@ if df_trabajo is not None and len(df_trabajo) >= 4:
             ax.bar(etiquetas_ordenadas, valores_ordenados, color='#1f77b4')
             ax.set_title("Comparativa QAOA: Combinaciones de Protección Más Óptimas")
             ax.set_xlabel("Zonas Prioritarias Seleccionadas")
+            ax.set_ylabel("Frecuencia (de 1000 disparos)")
+            st.pyplot(fig)
 
 # --- PIE DE PÁGINA Y CONTACTO ---
 st.divider()
