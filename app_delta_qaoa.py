@@ -164,4 +164,4 @@ with col_c1:
         st.toast("¡Gracias por tu valoración! Seguimos impulsando la Economía Azul en Tarragona.")
 with col_c2:
     st.markdown("¿Deseas validar este modelo en hardware cuántico real de **IBM Quantum** o proponer una colaboración?")
-    st.markdown("📩 **Correo directo:** [nhemesysgonzalez@gmail.com](mailto:nhemesysgonzalez@gmail.com) | 💬 **[Comentarios en GitHub](https://github.com)**")
+    st.markdown("📩 **Correo directo:** [nhemesysgonzalez@gmail.com](mailto:nhemesysgonzalez@gmail.com) | 💬 **[Comentarios en GitHub](https://github.com/nhemesysgonzalez-stack/contencion-delta-ebro-qaoa/issues)**")
